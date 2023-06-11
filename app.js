@@ -16,39 +16,31 @@ var express = require("express");
 var app = express();
 const mysql = require("mysql");
 const dotenv = require("dotenv");
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 dotenv.config();
 
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DATABASE,
-  port: process.env.DB_PORT,
-});
-
-connection.connect((error) => {
-  if (error) console.log(error);
-  {
-    console.log("Connected Hello");
-  }
-});
-
-connection.query("SELECT * FROM tickets", function (error, result, fields) {
-  console.log(error);
+  user: "root",
+  password: "12345678",
+  database: "tickets",
 });
 
 app.get("/", (req, res) => {
+  console.log("Req", req.body);
   connection.query("SELECT * FROM tickets", (error, results, fields) => {
     if (error) {
       res.status(500).json({ error });
     } else {
       console.log("Results", results);
-      res.status(200);
+      res.status(200).json({ results });
     }
   });
 });
 
 app.post("/booking", (req, res) => {
+  console.log("Req Here", req.body);
   const {
     flightType,
     homeLocation,
@@ -70,18 +62,18 @@ app.post("/booking", (req, res) => {
             phoneNumber VARCHAR(10),
             countryCode VARCHAR(3),
             homeLocation VARCHAR(255),
-            destination VARCHAR(255)
+            destination VARCHAR(255),
             flightType VARCHAR(255),
             departureDate VARCHAR(255),
-            passengerCount INT,
-            currency VARCHAR(10),
-          )`,
+            passengerCount VARCHAR(3),
+            currency VARCHAR(10)
+            );`,
         function (error, result) {
           if (error) console.log("Error Creating Table", error);
           else {
             console.log("created table");
             connection.query(
-              "INSERT INTO VALUES (?,?,?,?,?,?,?,?,?)",
+              "INSERT INTO tickets VALUES (?,?,?,?,?,?,?,?,?)",
               [
                 email,
                 phoneNumber,
@@ -109,5 +101,5 @@ app.post("/booking", (req, res) => {
 });
 
 app.listen(8080, function () {
-  console.log("Example app listening on port 3000!");
+  console.log("Example app listening on port 8080!");
 });
