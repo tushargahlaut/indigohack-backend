@@ -15,6 +15,8 @@
 var express = require("express");
 var app = express();
 const mysql = require("mysql");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const connection = mysql.createConnection({
   host: process.env.DB_HOST,
