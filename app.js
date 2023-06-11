@@ -50,6 +50,7 @@ app.post("/booking", (req, res) => {
   const {
     flightType,
     homeLocation,
+    destination,
     departureDate,
     passCount,
     currency,
@@ -67,6 +68,7 @@ app.post("/booking", (req, res) => {
             phoneNumber VARCHAR(10),
             countryCode VARCHAR(3),
             homeLocation VARCHAR(255),
+            destination VARCHAR(255)
             flightType VARCHAR(255),
             departureDate VARCHAR(255),
             passengerCount INT,
@@ -77,12 +79,13 @@ app.post("/booking", (req, res) => {
           else {
             console.log("created table");
             connection.query(
-              "INSERT INTO VALUES (?,?,?,?,?,?,?,?)",
+              "INSERT INTO VALUES (?,?,?,?,?,?,?,?,?)",
               [
                 email,
                 phoneNumber,
                 countryCode,
                 homeLocation,
+                destination,
                 flightType,
                 departureDate,
                 passCount,
